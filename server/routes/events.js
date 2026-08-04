@@ -86,3 +86,85 @@ router.post("/", auth, async (req, res) => {
     res.status(500).json("message: err.message");
   }
 });
+router.put("/:id", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: "Events not found" });
+    if (event.organizer.toString() !== req.UserId) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to edit this event" });
+    }
+    Object.assign(event, req.body);
+    await event.save();
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+    if (event.organizer.toString() !== req.userId) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this event " });
+    }
+    await event.deleteOne();
+    res.json({ message: "Events deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+router.post("/:id/rsvp", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+    if (event.attendees.includes(req.userId)) {
+      return res.status(400).json({ message: "Already registered" });
+    }
+    if (event.capacity > 0 && event.attendees.length >= event.capacity) {
+      return res.status(400).json({ message: "Event is full" });
+    }
+    event.attendees.push(req.userId);
+    await event.save();
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+router.delete("/:id/rspv", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    event.attendees = event.attendees.filter(
+      (id) => id.toString() !== req.userid,
+    );
+    await event.save();
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+router.post("/:id/comments", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    const User = (await import("../models/User.js")).default;
+    const user = await User.findById(req.userId);
+
+    event.comments.push({
+      user: req.userId,
+      name: user.name,
+      text: req.body.text,
+    });
+    await event.save();
+    res.status(201).json(event.comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+export default router;
