@@ -1,10 +1,10 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import auth from "../middleware/auth.js";
 
-const router = express.router();
+const router = express.Router();
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 
@@ -12,9 +12,9 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-      return res.staus(400).json({ message: "all fields are required" });
+      return res.status(400).json({ message: "all fields are required" });
     }
-    const existing = await User.findone({ email: email.toLowerCase() });
+    const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
       return res.status(400).json({ message: "Email already registered" });
     }
@@ -36,7 +36,7 @@ router.post("/login", async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-    res.jason({
+    res.json({
       token: generateToken(user._id),
       user: { id: user._id, name: user.name, email: user.email },
     });

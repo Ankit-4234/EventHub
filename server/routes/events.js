@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
     const { search, category, when } = req.query;
     const query = {};
 
-    if (category && category != "ALL") query.category = category;
+    if (category && category !== "All") query.category = category;
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: "i" } },
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
     if (when === "week") {
       const weekLater = new Date();
       weekLater.setDate(now.getDate() + 7);
-      query.Date = { $gte: now, $lte: weekLater };
+      query.date = { $gte: now, $lte: weekLater };
     } else if (when === "month") {
       const monthLater = new Date();
       monthLater.setMonth(now.getMonth() + 1);
@@ -38,11 +38,11 @@ router.get("/", async (req, res) => {
   }
 });
 router.get("/my/hosting", auth, async (req, res) => {
-  const events = await Event.find({ organizer: req.UserId }).sort({ date: 1 });
+  const events = await Event.find({ organizer: req.userId }).sort({ date: 1 });
   res.json(events);
 });
 router.get("/my/attending", auth, async (req, res) => {
-  const events = await Event.find({ attendees: req.UserId })
+  const events = await Event.find({ attendees: req.userId })
     .populate("organizer", "name")
     .sort({ date: 1 });
   res.json(events);
@@ -51,7 +51,7 @@ router.get("/:id", async (req, res) => {
   try {
     const event = await Event.findById(req.params.id)
       .populate("organizer", "name")
-      .populate("commesnts.user", "name");
+      .populate("comments.user", "name");
     if (!event) return res.status(404).json({ message: "Event not found" });
     res.json(event);
   } catch (err) {
@@ -79,18 +79,18 @@ router.post("/", auth, async (req, res) => {
       location,
       image,
       capacity: capacity || 0,
-      organizer: req.UserId,
+      organizer: req.userId,
     });
     res.status(201).json(event);
   } catch (err) {
-    res.status(500).json("message: err.message");
+    res.status(500).json({ message: err.message });
   }
 });
 router.put("/:id", auth, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: "Events not found" });
-    if (event.organizer.toString() !== req.UserId) {
+    if (event.organizer.toString() !== req.userId) {
       return res
         .status(403)
         .json({ message: "Not authorized to edit this event" });
@@ -134,13 +134,13 @@ router.post("/:id/rsvp", auth, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-router.delete("/:id/rspv", auth, async (req, res) => {
+router.delete("/:id/rsvp", auth, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: "Event not found" });
 
     event.attendees = event.attendees.filter(
-      (id) => id.toString() !== req.userid,
+      (id) => id.toString() !== req.userId,
     );
     await event.save();
     res.json(event);
