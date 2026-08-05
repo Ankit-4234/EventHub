@@ -29,7 +29,7 @@ const eventSchema = new mongoose.Schema(
     time: { type: String, required: true },
     location: { type: String, required: true, trim: true },
     image: { type: String, default: "" },
-    capacity: { type: Number, defualt: 0 },
+    capacity: { type: Number, default: 0 },
     organizer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
