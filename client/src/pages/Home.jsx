@@ -57,7 +57,18 @@ const Home = () => {
           <option value="month">This month</option>
         </select>
       </section>
-      {loading ? <p className="muted">Loading events...</p> : events.length}
+      {loading ? (
+        <p className="muted">Loading events...</p>
+      ) : events.length === 0 ? (
+        <p className="muted">No events match your search</p>
+      ) : (
+        <div className="event-grid">
+          {events.map((ev) => (
+            <EventCard key={ev._id} event={ev} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
+export default Home;
