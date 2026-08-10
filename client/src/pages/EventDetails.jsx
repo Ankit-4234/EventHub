@@ -40,4 +40,57 @@ const EventDetails = () => {
     await api.delete(`/events/${id}`);
     navigate("/dashboard");
   };
+  return (
+    <div className="page details-page">
+      <span className="ticket-category">{event.category}</span>
+      <h1>{event.title}</h1>
+      <p className="muted">
+        {new Date(event.data).toDateString()} · {event.time} · {event.location}
+      </p>
+      <p className="hosted-by">Hosted by {event.organizer.name}</p>
+      {event.image && (
+        <img src={event.image} alt={event.title} className="event-image" />
+      )}
+      <p className="event-description">{event.description}</p>
+      {msg && <p className="error-text">{msg}</p>}
+      <div className="details-action">
+        {isOwner ? (
+          <>
+            <button
+              className="btn-accent"
+              onClick={() => navigate(`/edit/${id}`)}
+            >
+              Edit event
+            </button>
+            <button className="btn-ghost" onClick={handleDelete}>
+              Delete
+            </button>
+          </>
+        ) : user ? (
+          <button
+            className={isFull && isAttending ? "btn-disabled" : "btn-accent"}
+            disabled={isFull && !isAttending}
+            onClick={handleRSVP}
+          >
+            {isAttending
+              ? "Cancel RSVP"
+              : isFull
+                ? "Event full"
+                : "RSVP to attend"}
+          </button>
+        ) : (
+          <button className="btn-accent" onClick={() => navigate("login")}>
+            Login to RSVP
+          </button>
+        )}
+        <span className="muted">
+          {soptsLeft === null
+            ? "Open entry"
+            : `${event.attendees.length}/${event.capacity} registered`}
+        </span>
+      </div>
+      <CommentSection eventId={id} comments={event.comments} onUpdate={load} />
+    </div>
+  );
 };
+export default EventDetails;
