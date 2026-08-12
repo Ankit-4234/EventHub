@@ -44,11 +44,6 @@ const CreateEvent = () => {
           onChange={(e) => setForm({ ...form, title: e.target.value })}
           required
         />
-        <textarea
-          placeholder="Description"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-        />
         <div className="form-row">
           <select
             value={form.category}

@@ -1,25 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/Authcontext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const Navigate = useNavigate();
   return (
     <nav className="navbar">
-      <link to="/" className="brand">
+      <Link to="/" className="brand">
         EVENT<span>HUB</span>
-      </link>
+      </Link>
       <div className="nav-links">
         {user ? (
           <>
-            <link to="/create">Host an event </link>
+            <Link to="/create">Host an event </Link>
             <Link to="/dashboard">Dashboard</Link>
             <span className="nav-user">Hi, {user.name.split(" ")[0]}</span>
             <button
               className="btn-ghost"
               onclick={() => {
                 logout();
-                navigate("");
+                navigate("/");
               }}
             >
               Logout

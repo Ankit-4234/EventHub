@@ -31,7 +31,7 @@ const Home = () => {
   }, [search, category, when]);
   return (
     <div className="page">
-      <section className="filter-bar">
+      <section className="hero">
         <h1> Find what's happening near you</h1>
         <p>
           Local events, hosted by people areound you. Ticket-free, sign-up easy
@@ -42,7 +42,7 @@ const Home = () => {
           className="search-input"
           placeholder="search events,place and keywords"
           value={search}
-          onChange={(e) => setCategory(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map((c) => (

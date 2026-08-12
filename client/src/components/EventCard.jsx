@@ -13,7 +13,7 @@ const EventCard = ({ event }) => {
     <Link to={`/events/${event._id}`} className="ticket-card">
       <div className="ticket-date-badge">
         <span className="ticket-month">{month}</span>
-        <span className="ticket-date">{day}</span>
+        <span className="ticket-day">{day}</span>
       </div>
       <div className="ticket-perforation" />
       <div className="ticket-body">

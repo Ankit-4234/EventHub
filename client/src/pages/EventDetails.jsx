@@ -45,7 +45,7 @@ const EventDetails = () => {
       <span className="ticket-category">{event.category}</span>
       <h1>{event.title}</h1>
       <p className="muted">
-        {new Date(event.data).toDateString()} · {event.time} · {event.location}
+        {new Date(event.date).toDateString()} · {event.time} · {event.location}
       </p>
       <p className="hosted-by">Hosted by {event.organizer.name}</p>
       {event.image && (
@@ -68,7 +68,7 @@ const EventDetails = () => {
           </>
         ) : user ? (
           <button
-            className={isFull && isAttending ? "btn-disabled" : "btn-accent"}
+            className={isFull && !isAttending ? "btn-disabled" : "btn-accent"}
             disabled={isFull && !isAttending}
             onClick={handleRSVP}
           >
@@ -79,7 +79,7 @@ const EventDetails = () => {
                 : "RSVP to attend"}
           </button>
         ) : (
-          <button className="btn-accent" onClick={() => navigate("login")}>
+          <button className="btn-accent" onClick={() => navigate("/login")}>
             Login to RSVP
           </button>
         )}

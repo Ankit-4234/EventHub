@@ -8,7 +8,7 @@ const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const submit = async (e) => {
-    e.PreventDefault();
+    e.preventDefault();
     try {
       await login(form.email, form.password);
       navigate("/");
@@ -16,7 +16,7 @@ const Login = () => {
       setError(err.response?.data?.message || "login failed");
     }
   };
-  retrun(
+  return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={submit}>
         <h2>welcome back</h2>
@@ -41,7 +41,7 @@ const Login = () => {
           New here?<Link to="/register">Create an account</Link>
         </p>
       </form>
-    </div>,
+    </div>
   );
 };
 export default Login;

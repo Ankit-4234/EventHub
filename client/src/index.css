@@ -120,7 +120,7 @@ h3 {
 .event-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  grid: 1.5rem;
+  gap: 1.5rem;
 }
 .ticket-card {
   background: #f7f3e9;
@@ -131,7 +131,7 @@ h3 {
   text-decoration: none;
   overflow: hidden;
 }
-ticket-date-badge {
+.ticket-date-badge {
   background: #e4572e;
   color: #f7f3e9;
   width: 4.5rem;

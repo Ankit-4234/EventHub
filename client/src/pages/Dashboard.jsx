@@ -23,7 +23,7 @@ const Dashboard = () => {
           Hosting ({hosting.length})
         </button>
         <button
-          className={tab === "attending" ? "tab-active" : "tab"}
+          className={tab === "attending" ? "tab active" : "tab"}
           onClick={() => setTab("attending")}
         >
           Attending ({attending.length})
@@ -31,7 +31,7 @@ const Dashboard = () => {
       </div>
       {list.length === 0 ? (
         <p className="muted">
-          {tab === "Hosting"
+          {tab === "hosting"
             ? "You haven't hosted any events yet."
             : "You haven't RSVP'd to do anything yet"}
         </p>

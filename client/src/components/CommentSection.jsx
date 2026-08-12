@@ -18,7 +18,7 @@ const CommentSection = ({ eventId, comments, onUpdate }) => {
       {user && (
         <form onSubmit={submit} className="comment-form">
           <input
-            value="text"
+            value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Ask a question or leave note"
           />

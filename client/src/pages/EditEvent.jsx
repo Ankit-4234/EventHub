@@ -19,13 +19,13 @@ const EditEvent = () => {
   useEffect(() => {
     api
       .get(`/events/${id}`)
-      .then(({ data }) => setForm({ ...data, date: data.data.slice(0, 10) }));
+      .then(({ data }) => setForm({ ...data, date: data.date.slice(0, 10) }));
   }, [id]);
   const submit = async (e) => {
-    e.prevent.default();
+    e.preventDefault();
     try {
       await api.put(`/events/${id}`, form);
-      navigate(`events/${id}`);
+      navigate(`/events/${id}`);
     } catch (err) {
       setError(err.response?.data?.message || "Could not update event");
     }
@@ -69,7 +69,7 @@ const EditEvent = () => {
         <div className="form-row">
           <input
             type="date"
-            value={form.data}
+            value={form.date}
             onChange={(e) => setForm({ ...form, date: e.target.value })}
             required
           />
