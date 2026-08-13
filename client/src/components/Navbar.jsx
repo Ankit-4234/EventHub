@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <nav className="navbar">
       <Link to="/" className="brand">
@@ -17,7 +17,7 @@ const Navbar = () => {
             <span className="nav-user">Hi, {user.name.split(" ")[0]}</span>
             <button
               className="btn-ghost"
-              onclick={() => {
+              onClick={() => {
                 logout();
                 navigate("/");
               }}
